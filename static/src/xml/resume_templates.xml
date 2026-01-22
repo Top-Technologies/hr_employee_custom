@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-inherit="hr_skills.ResumeListRenderer.RecordRow" t-inherit-mode="extension">
+        <xpath expr="//small[hasclass('o_resume_line_dates')]" position="inside">
+            <span t-if="data.experience_duration" class="ms-1 text-primary">
+                (<t t-esc="data.experience_duration"/>)
+            </span>
+        </xpath>
+    </t>
+</templates>
