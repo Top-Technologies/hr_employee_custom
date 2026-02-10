@@ -14,9 +14,6 @@
             <xpath expr="//page[@name='skills_resume']//div[hasclass('o_group_resume')]/separator" position="before">
                 <group name="experience_summary_group">
                     <group>
-                        <field name="joining_date"/>
-                    </group>
-                    <group>
                         <field name="experience_summary" readonly="1"/>
                     </group>
                 </group>
@@ -30,3 +27,4 @@
         </field>
     </record>
 </odoo>
+
