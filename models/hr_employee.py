@@ -8,21 +8,23 @@ class HrEmployee(models.Model):
     _inherit = 'hr.employee'
 
     age = fields.Integer(string='Age', compute='_compute_age', store=True, groups="hr.group_hr_user")
-    joining_date = fields.Date(
-        string='Joining Date', 
-        compute='_compute_joining_date', 
-        store=True, 
-        readonly=False, 
-        groups="hr.group_hr_user", 
+        joining_date = fields.Date(
+        string='Joining Date',
+        compute='_compute_joining_date',
+        store=True,
+        readonly=True,
+        groups="hr.group_hr_user",
         tracking=True,
         help="Date the employee joined the company. Defaults to the first contract date.")
     experience_summary = fields.Char(string='Total Experience', compute='_compute_experience_summary', store=True, groups="hr.group_hr_user")
 
-    @api.depends('contract_ids.date_start')
+   @api.depends('contract_ids.date_start')
     def _compute_joining_date(self):
         for employee in self:
-            if not employee.joining_date:
-                employee.joining_date = employee.first_contract_date
+            contracts = employee.contract_ids.filtered(lambda c: c.date_start)
+            employee.joining_date = (
+                min(contracts.mapped('date_start')) if contracts else False
+            )
 
     @api.depends('birthday')
     def _compute_age(self):
@@ -70,3 +72,4 @@ class HrEmployee(models.Model):
         for employee in self:
             if employee.birthday and employee.age < 18:
                 raise ValidationError(_("Hey, you cannot enter an age less than 18! An employee must be at least 18 years old."))
+
